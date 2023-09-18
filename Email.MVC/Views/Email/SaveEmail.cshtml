@@ -1,0 +1,55 @@
+﻿@model Email.MVC.EmailModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Atualização de E-mails</title>
+</head>
+<body>
+    @using (Html.BeginForm("Email", "SaveEmail", FormMethod.Post, new { id = "emailForm" }))
+    {
+        <label for="email">E-mail</label>
+        <input type="email" name="email" id="email" placeholder="E-mail">
+        <button id="btnSubmitEmailForm">Salvar</button>
+    }
+</body>
+</html>
+
+@section scripts
+{
+    <script>
+        $(function () {
+            $("#emailForm").on("submit", function (el) {
+                $("#btnSubmitEmailForm").attr("disabled", true);
+                el.preventDefault();
+                var form = $(this);
+                var url = form.attr('action');
+                var email = objectifyForm(form.serializeArray());
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { email },
+                    success: function (data) {
+                        if (data.valido && data.valido === true) {
+
+                        } else {
+                            console.error(data);
+                        }
+                    },
+                    error: function (data) {
+                        console.error(data);
+                    },
+                    complete: function () {
+                        $("#btnSubmitEmailForm").removeAttr("disabled");
+                    }
+                });
+            });
+        });
+    </script>
+}

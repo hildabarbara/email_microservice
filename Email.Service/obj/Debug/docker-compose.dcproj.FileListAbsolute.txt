@@ -1,0 +1,1 @@
+C:\H\Email.Service\obj\Debug\docker-compose.dcproj.CoreCompileInputs.cache

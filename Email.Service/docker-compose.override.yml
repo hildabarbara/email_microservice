@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  
+  email.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RedisConnectionString=ecommerce.data:6379
+    ports:
+      - "5103:80"
+
+  sql.data:
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "5433:1433"
+
+  ecommerce.data:
+    ports:
+      - "6379:6379" 
+
+  email.mvc:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "55124:80"
+      - "44378:443"
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:C:\Users\ContainerUser\AppData\Roaming\ASP.NET\Https:ro
+      - ${APPDATA}/Microsoft/UserSecrets:C:\Users\ContainerUser\AppData\Roaming\Microsoft\UserSecrets:ro
+networks:
+  default:
+    external:
+      name: nat

@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  
+  email.api:
+    image: emailapi
+    build:
+      context: .
+      dockerfile: Email.API\Dockerfile
+    depends_on:
+      - sql.data
+      - redis
+
+  sql.data:
+    image: microsoft/mssql-server-linux:2017-latest
+
+  ecommerce.data:
+    container_name: redis
+    image: redis
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+
+  email.mvc:
+    image: emailmvc
+    build:
+      context: .
+      dockerfile: ..\Email.MVC\Dockerfile
